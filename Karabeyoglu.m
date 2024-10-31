@@ -3,9 +3,9 @@ clc
 
 %% Set Parameters
 B = 4.7; %- %Blowing parameter -> sourced from Evaluation of the Homologous Series of Normal Alkanes as Hybrid Rocket Fuels
-mu_g = 6.5E-5; %Pa-s %Average gaseous viscosity in port -> guess
+mu_g = 6.5E-6; %Pa-s %Average gaseous viscosity in port -> guess
 
-rho_f = 900; %kg/m^3 %Solid fuel density -> sourced from material properties database
+rho_f = 930; %kg/m^3 %Solid fuel density -> sourced from material properties database
 rho_g = 4; %kg/m^3 %Average gaseous density in port -> guess
 
 %Ratio for later use, reasonable estimate in range given by Karabeyoglu
@@ -29,13 +29,15 @@ L_m = 220; %kJ/kg %Heat of fusion -> sourced from NIST
 h_m = L_m + C_s*(T_m - T_a); %kJ/kg %Effective heat of melting
 h_e = h_m + C_l*(T_v - T_m); %kJ/kg %Effective heat of gas stream
 
-a_ent = 8E-20; %- %Entrainment coefficient -> guess based on Karabeyoglu
-alpha_hat = 1.5; %- %Dynamic pressure exponent -> sourced from Evaluation of the Homologous Series of Normal Alkanes as Hybrid Rocket Fuels
-beta_hat = 2; %- %Thickness exponent -> sourced from Evaluation of the Homologous Series of Normal Alkanes as Hybrid Rocket Fuels
+a_ent = 1E-11; %- %Entrainment coefficient -> guess based on Karabeyoglu
+alpha_hat = 1; %- %Dynamic pressure exponent -> sourced from Evaluation of the Homologous Series of Normal Alkanes as Hybrid Rocket Fuels
+beta_hat = 1; %- %Thickness exponent -> sourced from Evaluation of the Homologous Series of Normal Alkanes as Hybrid Rocket Fuels
 
 %% Initial Values
-r_dot = 1000;
-r_dot_v = 0;
+r_dot = 1;
+r_dot_v = 1;
+r_dot_ent = 0;
+
 converge = 1;
 prev = 1;
 i=1;
@@ -55,11 +57,19 @@ R_hv = (C_l*(T_v - T_m))/(h_e + L_v)
 R_he = h_m / (h_e + L_v)
 
 while converge > 0.0001
-    r_dot_ent = a_ent * G^(2*alpha_hat)/r_dot^(beta_hat)
-    r_dot_v = -(R_he+R_hv*(r_dot_v/r_dot))*r_dot_ent + F_r*(0.03*mu_g^(0.2)/rho_f)*(1+ Q_dot_r/Q_dot_c)*B*((C_B1)/(C_B1+C_B2*(r_dot_v/r_dot_cl)^0.75))*G^(0.8)*z^(-0.2)
+
+    if r_dot_v < 0
+        r_dot_v = 0;
+    end
+
+    r_dot_v = -(R_he+R_hv*(r_dot_v/r_dot))*r_dot_ent + F_r*(0.03*mu_g^(0.2)/rho_f)*(1+ Q_dot_r/Q_dot_c)*B*((C_B1)/(C_B1+C_B2*(r_dot_v/r_dot_cl)^0.75))*G^(0.8)*z^(-0.2);
+    
+    r_dot_ent = a_ent * G^(2*alpha_hat)/r_dot^(beta_hat);
+
     r_dot = r_dot_v + r_dot_ent
+
     a(i,:) = [r_dot, r_dot_ent, r_dot_v];
     i=i+1;
-    converge = abs(r_dot_v - prev)/abs(prev)
-    prev = r_dot_v
+    converge = abs(r_dot - prev)/abs(prev);
+    prev = r_dot;
 end

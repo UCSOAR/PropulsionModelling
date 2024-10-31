@@ -1,4 +1,5 @@
 clear
+clc
 
 %% Set Parameters
 B = 4.7; %- %Blowing parameter -> sourced from Evaluation of the Homologous Series of Normal Alkanes as Hybrid Rocket Fuels
@@ -28,7 +29,7 @@ L_m = 220; %kJ/kg %Heat of fusion -> sourced from NIST
 h_m = L_m + C_s*(T_m - T_a); %kJ/kg %Effective heat of melting
 h_e = h_m + C_l*(T_v - T_m); %kJ/kg %Effective heat of gas stream
 
-a_ent = 150; %- %Entrainment coefficient -> guess based on Karabeyoglu
+a_ent = 8E-20; %- %Entrainment coefficient -> guess based on Karabeyoglu
 alpha_hat = 1.5; %- %Dynamic pressure exponent -> sourced from Evaluation of the Homologous Series of Normal Alkanes as Hybrid Rocket Fuels
 beta_hat = 2; %- %Thickness exponent -> sourced from Evaluation of the Homologous Series of Normal Alkanes as Hybrid Rocket Fuels
 

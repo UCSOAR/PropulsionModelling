@@ -1,5 +1,4 @@
 import pandas as pd
-from needsMOIparts import NeedsMOIparts
 from moi_calc_calculator import *
 
 '''
@@ -10,15 +9,12 @@ NOTE:
 '''
 
 #reading in data
-file_name = 'Ouroboros Mass Budget - Ouroboros Mass Budget (1).csv'
+file_name = 'MOI_Calc/Ouroboros Mass Budget - Ouroboros Mass Budget (1).csv'
 
 rawData = pd.read_csv(file_name, sep=',', dtype=str)
 
 #getting header
 header = rawData.head(0)
-  
-partsNeedMOI = NeedsMOIparts.getPartsNeeded()
-indicesOfParts = NeedsMOIparts.getPartIndices()
 
 
 def getPartsNeedingMOICalc() -> dict:

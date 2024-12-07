@@ -1,0 +1,33 @@
+Karabeygolu and Colin Comments
+
+- move all propulsion system inputs to the top (mass flux, ambient temp, axial position, voi fraction, etc)
+
+- add capability for time series regression
+	- take in time series mass flow rate
+	- recompute time series mass flux based on new bore size
+	- assess stability of regression solutions over time (rate shouldnt have massive jumps between time steps)
+	- log fuel mass change over time, will run it for an ouroboros case and compare to final fuel mass
+
+- numerical methods (ONLY AFTER TIME SERIES IS IMPLEMENTED)
+	- Secant or Bisection will be good for you
+
+- evaluation
+	- compare with Colin
+	- use the same mass flux when comparing
+	- 2 types of parameters - database and empirical
+		- for database type, which ones can we run a test to find for our specific fuel (Max job)
+		- for empirical type - sensitivity, which are worth pursuing and which of those can be slab burner
+		- lets see which require static fire, try and avoid as much as possible tho
+	- see rest of Fuel Crew list for next steps on that tho
+
+- classes (no rush on this)
+	- make a class for each fuel mix used with all the properties
+	- eventually when max gets to changing mixtures, want to be able to adapt the code easily	
+	- this is a comment for both models btw
+
+- lattice
+	- comment sources plz, will help us evaluate properties that need more investigation
+	- why does changing the order mess up the calculation - seems sus to me, MATLAB shouldnt be THAT finicky
+	- difference tolerance isnt a measure of convergence between solutions, only between a true answer and calculated answer
+	- use relative error instead between tested values when numerical methods are implemented (cant do this with testing subsequent values)
+	- propagate this over time too, possible that they have varying levels of agreement over time
